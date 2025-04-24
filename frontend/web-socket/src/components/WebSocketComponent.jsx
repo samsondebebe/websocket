@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import io from 'socket.io-client';
 
-const socket = io('http://192.168.8.100:5000'); // Update this to your backend server's IP/hostname
+const socket = io('http://localhost:5000'); // Update this to your backend server's IP/hostname
 
 const VideoBroadcast = () => {
   const [localStream, setLocalStream] = useState(null);
@@ -115,7 +115,7 @@ const VideoBroadcast = () => {
             await pc.addIceCandidate(candidate);
           } catch (error) {
             console.error('Failed to add ICE candidate:', error);
-          }
+          }8 
         }
       }
     });
