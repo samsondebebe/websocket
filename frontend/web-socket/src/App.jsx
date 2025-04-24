@@ -5,7 +5,7 @@ function App() {
     return (
         <div>
             <h1>Private Chat</h1>
-            <WebSocketComponent userId="user1" /> {/* Change for each user */}
+            <WebSocketComponent /> {/* Change for each user */}
         </div>
     );
 }

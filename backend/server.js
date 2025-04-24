@@ -1,27 +1,33 @@
+const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
+const cors = require('cors');
 
-const server = http.createServer();
+const app = express();
+app.use(cors());
+
+const server = http.createServer(app);
 const io = new Server(server, {
-    cors: {
-        origin: "*",
-        methods: ["GET", "POST"]
-    }
+  cors: {
+    origin: '*',
+  },
 });
 
 io.on('connection', (socket) => {
+  console.log('New client connected:', socket.id);
 
-    socket.on('message', (msg) => {
-        io.emit('message', `Server: ${msg}`);
-    });
+  // Relay signal to the intended recipient
+  socket.on('send-signal', ({ signalData, to }) => {
+    if (to) {
+      io.to(to).emit('receive-signal', { from: socket.id, signalData });
+    }
+  });
 
-    socket.on('typing', (username) => {
-        socket.broadcast.emit('typing', `${username} is typing...`);
-    });
-
-    socket.on('disconnect', () => console.log('Client disconnected'));
+  socket.on('disconnect', () => {
+    console.log('Client disconnected:', socket.id);
+  });
 });
 
-server.listen(5000, () => {
-    console.log('Socket.io server running on port 5000');
+server.listen(5000, '0.0.0.0', () => {
+  console.log('Backend running on http://192.168.8.100:5000');
 });
